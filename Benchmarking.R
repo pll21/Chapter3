@@ -1,11 +1,16 @@
 library(readxl)
 library(readr)
 
-conditions_df <- read_excel("Data/benchmark/Supplementary_Table2.xlsx",
-                            sheet = "Conditions")
-sites_df <- read_excel("Data/benchmark/Supplementary_Table2.xlsx",
-                            sheet = "Phosphosites")
-fc_df <- read_csv("Data/benchmark/Foldchanges.csv")
+# conditions_df <- read_excel("Data/benchmark/Supplementary_Table2.xlsx",
+#                             sheet = "Conditions")
+# write.csv(conditions_df, "Data/benchmark/Conditions.csv", row.names = F)
+# sites_df <- read_excel("Data/benchmark/Supplementary_Table2.xlsx",
+#                             sheet = "Phosphosites")
+# write.csv(sites_df, "Data/benchmark/Phosphosites.csv", row.names = F)
+
+conditions_df <- read.csv("Data/benchmark/Conditions.csv")
+sites_df <- read.csv("Data/benchmark/Phosphosites.csv")
+fc_df <- read.csv("Data/benchmark/Foldchanges.csv")
 names(fc_df) <- paste("e", names(fc_df), sep = "")
 
 head(fc_df)
@@ -43,7 +48,10 @@ for (i in 1:ncol(fc_df)){
   names(tmpdf)[names(tmpdf)== "permutationScore"] <- names(fc_df[,i])
   
   compiled_results <- merge(compiled_results, tmpdf, by= "Kinase", all = T)
+  message(i)
 }
+
+write.csv(compiled_results, file = "Results/180125_Benchmark_all.csv", row.names = F)
 
 ## combine all results
 ## define positive set- condition_kin, and negative set
