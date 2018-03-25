@@ -7,11 +7,15 @@ library(readr)
 # sites_df <- read_excel("Data/benchmark/Supplementary_Table2.xlsx",
 #                             sheet = "Phosphosites")
 # write.csv(sites_df, "Data/benchmark/Phosphosites.csv", row.names = F)
+# kinconpairs_df <- read_excel("KSEA_benchmark_supp/Supplementary_Table1.xlsx",
+#                                                         sheet = "KinaseConditionPairs")
+# write.csv(kinconpairs_df, "Data/benchmark/kinconpairs.csv", row.names = F)
+# write.csv(fc_df, "Data/benchmark/Foldchanges.csv", row.names = F)
 
 conditions_df <- read.csv("Data/benchmark/Conditions.csv")
 sites_df <- read.csv("Data/benchmark/Phosphosites.csv")
 fc_df <- read.csv("Data/benchmark/Foldchanges.csv")
-names(fc_df) <- paste("e", names(fc_df), sep = "")
+kinconpairs_df <- read.csv("Data/benchmark/kinconpairs.csv")
 
 head(fc_df)
 ## code results such that each experiment output can be expressed as condition_kin : pKSEA
@@ -37,6 +41,10 @@ for (i in 1:ncol(fc_df)){
   sumstat$pval <- NA
   
   mdf <- get_matched_data(sumstat, NetworKINPred_db)
+  
+  # filter KSEA
+  mdf <- KSEAfilter(mdf, KSEAdb, reverse = F)
+  
   mdf_calc <- calc_contribution(mdf)
   mdf_scores <- getscores(mdf_calc)
   mdf_perm <- permtest(mdf_calc, perms= 1000, seed=123)

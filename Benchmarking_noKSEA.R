@@ -50,7 +50,7 @@ for (i in 1:ncol(fc_df)){
   names(tmpdf)[names(tmpdf)== "permutationScore"] <- names(fc_df)[i]
   
   compiled_results <- merge(compiled_results, tmpdf, by= "Kinase", all = T)
-  message(i)
+  message(paste(i,".."))
 }
 
 write.csv(compiled_results, file = "Results/180125_Benchmark_pred_only.csv", row.names = F)
